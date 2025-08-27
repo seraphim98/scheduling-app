@@ -1,20 +1,16 @@
 ﻿using AutoMapper;
-using Scheduler;
-using Scheduler.Database;
-using Scheduler.Controllers;
-using Scheduler.Models;
-namespace Scheduler.Tests
+
+namespace Scheduler.Tests;
+
+public class TestUtils
 {
-    public class TestUtils
+    public static IMapper GetMapper()
     {
-        static public IMapper GetMapper()
+        var mapperConfig = new MapperConfiguration(mc =>
         {
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-            IMapper mapper = mapperConfig.CreateMapper();
-            return mapper;
-        }
+            mc.AddProfile(new MappingProfile());
+        });
+        IMapper mapper = mapperConfig.CreateMapper();
+        return mapper;
     }
 }
