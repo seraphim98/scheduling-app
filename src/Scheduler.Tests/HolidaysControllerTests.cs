@@ -1,15 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.EntityFrameworkCore;
-using Moq;
-using AutoMapper;
-using Scheduler;
-using Scheduler.Database;
+﻿using Moq;
 using Scheduler.Controllers;
+using Scheduler.Database;
 using Scheduler.Models;
-using System.Reflection.Metadata;
-using static System.Reflection.Metadata.BlobBuilder;
-using System.Data.Entity.Infrastructure;
 
 //Source https://learn.microsoft.com/en-us/ef/ef6/fundamentals/testing/mocking
 namespace Scheduler.Tests;
@@ -19,13 +11,14 @@ public class HolidaysControllerTests
 {
     Mock<IRepository<Holiday>> mockRepository = new();
     private readonly List<Holiday> data = new List<Holiday>
-        {
-            new(Guid.NewGuid(), "1", new DateTime()),
-            new(Guid.NewGuid(), "2", new DateTime()),
-            new(Guid.NewGuid(), "3", new DateTime())
-        };
+    {
+        new(Guid.NewGuid(), "1", new DateTime()),
+        new(Guid.NewGuid(), "2", new DateTime()),
+        new(Guid.NewGuid(), "3", new DateTime()),
+    };
+
     [TestMethod]
-    async public Task HolidaysReturnedOnGet()
+    public async Task HolidaysReturnedOnGet()
     {
         mockRepository.Setup(x => x.Query()).ReturnsAsync(data);
         var mapper = TestUtils.GetMapper();
@@ -34,10 +27,10 @@ public class HolidaysControllerTests
         var holidays = await service.GetHolidays();
 
         mockRepository.Verify(x => x.Query(), Times.Once());
-
     }
+
     [TestMethod]
-    async public Task HolidayCreatedOnPost()
+    public async Task HolidayCreatedOnPost()
     {
         var mapper = TestUtils.GetMapper();
         var service = new HolidaysController(mockRepository.Object, mapper);
@@ -46,8 +39,9 @@ public class HolidaysControllerTests
 
         mockRepository.Verify(m => m.CreateAsync(It.IsAny<Holiday>()), Times.Once());
     }
+
     [TestMethod]
-    async public Task HolidayDeletedOnDelete()
+    public async Task HolidayDeletedOnDelete()
     {
         var mapper = TestUtils.GetMapper();
         mockRepository.Setup(x => x.GetByIdAsync(data[0].Id)).ReturnsAsync(data[0]);
@@ -57,8 +51,9 @@ public class HolidaysControllerTests
 
         mockRepository.Verify(m => m.DeleteAsync(data[0]), Times.Once());
     }
+
     [TestMethod]
-    async public Task HolidayUpdatedOnPut()
+    public async Task HolidayUpdatedOnPut()
     {
         var mapper = TestUtils.GetMapper();
         var service = new HolidaysController(mockRepository.Object, mapper);

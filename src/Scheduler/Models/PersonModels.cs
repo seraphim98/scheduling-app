@@ -1,8 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Scheduler.Models;
 
-public record class PersonModel(Guid Id, string FirstName, string LastName, List<string> EventNames);
+public record class PersonModel(
+    Guid Id,
+    string FirstName,
+    string LastName,
+    List<string> EventNames
+);
 
 public class PersonCreateModel(string firstName, string lastName)
 {
