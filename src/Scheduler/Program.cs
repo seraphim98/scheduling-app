@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Scheduler;
@@ -5,8 +6,13 @@ using Scheduler.Database;
 using Scheduler.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString =
-    "Host=localhost;Port=5432;Database=Scheduler;Username=postgres;Password=admin";
+
+var isDevelopment = builder.Environment.IsDevelopment();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (isDevelopment)
+{
+    connectionString = "Host=localhost;Port=5432;Database=Scheduler;Username=postgres;Password=postgres";
+}
 builder.Services.AddControllers();
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -41,6 +47,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var dbContext = app.Services.CreateScope().ServiceProvider.GetRequiredService<DatabaseContext>();
+dbContext.Database.Migrate();
+
 
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
