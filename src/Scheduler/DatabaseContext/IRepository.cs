@@ -1,9 +1,13 @@
+using System.Linq.Expressions;
+
 namespace Scheduler.Database;
 
 public interface IRepository<T>
     where T : class
 {
     public Task<List<T>> Query();
+    public Task<List<T>> Query(Expression<Func<T, bool>> predicate);
+    public Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
     public Task<T?> GetByIdAsync(Guid id);
     public Task CreateAsync(T entity);
     public Task UpdateAsync(T entity);

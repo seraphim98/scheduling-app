@@ -1,5 +1,6 @@
 using AutoMapper;
 using Scheduler.Convertors;
+using Scheduler.Cryptography;
 using Scheduler.Models;
 
 namespace Scheduler;
@@ -29,5 +30,12 @@ public class MappingProfile : Profile
         CreateMap<RecipeUpdateModel, Recipe>();
         CreateMap<RecipeCreateModel, Recipe>()
             .ForCtorParam(nameof(Recipe.Id), x => x.MapFrom(y => Guid.NewGuid()));
+
+        CreateMap<UserUpdateModel, User>();
+
+        CreateMap<User, UserCreateModel>();
+        CreateMap<User, UserUpdateModel>();
+        CreateMap<UserModel, User>();
+        CreateMap<User, UserModel>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Scheduler.Database;
 
@@ -11,6 +12,16 @@ public class Repository<T>(DatabaseContext context) : IRepository<T>
     public async Task<List<T>> Query()
     {
         return await _dbSet.ToListAsync();
+    }
+
+    public async Task<List<T>> Query(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.Where(predicate).ToListAsync();
+    }
+
+    public async Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.SingleOrDefaultAsync(predicate);
     }
 
     public async Task<T?> GetByIdAsync(Guid id)

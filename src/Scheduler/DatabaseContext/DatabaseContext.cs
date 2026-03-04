@@ -10,6 +10,7 @@ public class DatabaseContext : DbContext
     public DbSet<Person> People { get; set; }
     public DbSet<PersonEvent> PersonEvents { get; set; }
     public DbSet<Holiday> Holidays { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options) { }

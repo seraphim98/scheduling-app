@@ -1,7 +1,7 @@
-using System.Data.Entity;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Scheduler;
+using Scheduler.Cryptography;
 using Scheduler.Database;
 using Scheduler.Models;
 
@@ -14,6 +14,7 @@ if (isDevelopment)
     connectionString = "Host=localhost;Port=5432;Database=Scheduler;Username=postgres;Password=postgres";
 }
 builder.Services.AddControllers();
+builder.Services.AddScoped<ISchedulerCryptography, SchedulerCryptography>();
 var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new MappingProfile());
@@ -30,6 +31,7 @@ builder.Services.AddScoped<IRepository<PersonEvent>, Repository<PersonEvent>>();
 builder.Services.AddScoped<IRepository<Event>, Repository<Event>>();
 builder.Services.AddScoped<IRepository<Holiday>, Repository<Holiday>>();
 builder.Services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
+builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 builder.Services.AddCors(o =>
     o.AddPolicy(
         "MyPolicy",
@@ -41,7 +43,6 @@ builder.Services.AddCors(o =>
 );
 
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
